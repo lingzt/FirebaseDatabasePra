@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+@import Firebase;
 
 @interface ViewController ()
 
@@ -16,12 +17,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    [self loginUserToFirebase];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+-(void)loginUserToFirebase{
+    NSString *newPwd = @"111111";
+    
+    [[FIRAuth auth] signInWithEmail:@"ling@gmail.com"
+                           password:newPwd
+                         completion:^(FIRUser *user, NSError *error) {
+                             
+                             if (error) {
+                                 NSString *message=@"Invalid email or password";
+                                 NSString *alertTitle=@"Invalid!";
+                                 NSString *OKText=@"OK";
+                                 
+                                 UIAlertController *alertView = [UIAlertController alertControllerWithTitle:alertTitle message:message preferredStyle:UIAlertControllerStyleAlert];
+                                 UIAlertAction *alertAction = [UIAlertAction actionWithTitle:OKText style:UIAlertActionStyleCancel handler:nil];
+                                 [alertView addAction:alertAction];
+                                 [self presentViewController:alertView animated:YES completion:nil];
+                             }else{
+                                 NSLog(@"Login success!!!!!!!!!!!!");
+                             
+                             }
+                         }];
 }
+
 
 @end
