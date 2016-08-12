@@ -10,17 +10,19 @@
 @import Firebase;
 
 @interface ViewController ()
-
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
 @implementation ViewController
+NSArray *guestArray;
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loginUserToFirebase];
 }
 
-
+#pragma mark -- login
 -(void)loginUserToFirebase{
     NSString *newPwd = @"111111";
     
@@ -43,6 +45,23 @@
                              }
                          }];
 }
+
+#pragma mark -- tableView
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [guestArray count];
+
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    cell.textLabel.text = @"test cell";
+    return cell;
+
+}
+
+
+#pragma mark -- retrieve 
+
+
 
 
 @end

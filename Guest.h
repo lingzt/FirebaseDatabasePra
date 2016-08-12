@@ -17,17 +17,13 @@
 
 
 
--(id)initGuestWithGid:(NSString *)gid;
--(id)updateGuestWithPlustOneList:(NSArray *)guestsPlusOneList;
--(void)addNewGuestToFBDatabaseWithWithNewGuest:(Guest *)newGuest;
--(void)updateGuestToFBDatabaseWithUpdatedGuest:(Guest *)updatedGuest;
+
 
 /*
  FirebaseDatabase store the following data type
  NSString
  NSNumber
  NSArray
- 
  */
 
 
