@@ -82,9 +82,10 @@ NSMutableArray *guestArray;
                  Guest *guestToAssign = [[Guest alloc]initGuestWithGuestDict:guestInDictionaryFormat];
                  
                      [guestArray addObject:guestToAssign];
+                 [self.tableView reloadData];
              }
          }
-         [self.tableView reloadData];
+//         [self.tableView reloadData];
      }];
 
     

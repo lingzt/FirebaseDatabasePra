@@ -33,8 +33,6 @@
     }
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self updateGImageWithGuestToBeUpdatedWithGid:_gid];
-        NSLog(@"%@",_gImage.description);
-        NSLog(self.description);
     });
     return self;
 }
@@ -42,13 +40,17 @@
 -(void)updateGImageWithGuestToBeUpdatedWithGid :(NSString *)gid{
     FIRStorage *storage = [FIRStorage storage];
     FIRStorageReference *gustImageStorageRef = [storage referenceForURL:@"gs://fir-databasepra.appspot.com/guestImage/"];
-    FIRStorageReference *guestImageRef = [gustImageStorageRef child:(@"%@.png",gid)];
+    FIRStorageReference *guestImageRef = [gustImageStorageRef child:@"randomGidForGuestOne.png"];
+//    FIRStorageReference *guestImageRef = [gustImageStorageRef child:(@"%@.png",gid)];
+    NSLog(@"______________the download url is %@",guestImageRef);
     
     [guestImageRef dataWithMaxSize:1 * 1024 * 1024 completion:^(NSData * _Nullable data, NSError * _Nullable error) {
         if (error != nil) {
+            NSLog(@"__________________ nooooo gooooood");
             NSLog(error.description);
         }else{
             _gImage = [UIImage imageWithData:data];
+            NSLog(@"__________________so far so gooooood %@",data);
         }
     }];
 }
