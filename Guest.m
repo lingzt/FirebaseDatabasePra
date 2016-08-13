@@ -11,29 +11,23 @@
 @import FirebaseStorage;
 
 @implementation Guest
-/*
- @property (strong,nonatomic) NSString *gid;
- @property (strong,nonatomic) NSNumber *guestAndPlusOneNumber;
- @property (strong,nonatomic) NSArray *guestAndPlusOneList;
- @property (strong,nonatomic) UIImage *gImage;
- */
 
 -(id)initGuestWithGuestDict: (NSDictionary *)guestDict{
     self = [super init];
     if (self) {
         _gid = guestDict[@"gid"];
         _guestAndPlusOneNumber= guestDict[@"guestAndPlusOneNumber"];
-        NSLog(@"___________ guestDict is %@",guestDict);
         
-        //very cool way fetch array from Firebase databse, the data was store as dictionary like "guestAndPlusOneList":{"0": "randomGidForGuestOne","1":"randomGidForGuestTwo"}, however we get it back as "guestAndPlusOneList":["randomGidForGuestOne","randomGidForGuestTwo"],
-        
+/*very cool way fetch array from Firebase databse, the data was store as dictionary like "guestAndPlusOneList":{"0": "randomGidForGuestOne","1":"randomGidForGuestTwo"}, however we get it back as "guestAndPlusOneList":["randomGidForGuestOne","randomGidForGuestTwo"],*/
+
         NSMutableArray *guestAndPlusOneListArray= guestDict[@"guestAndPlusOneList"];
+        NSLog(@"_________the guest list array is %@",guestAndPlusOneListArray);
         _guestAndPlusOneList = guestAndPlusOneListArray;
         _gImage = [UIImage imageNamed:@"placeholder.png"];
     }
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [self updateGImageWithGuestToBeUpdatedWithGid:_gid];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^(){
+//        [self updateGImageWithGuestToBeUpdatedWithGid:_gid];
+//    });
     return self;
 }
 
@@ -43,7 +37,6 @@
     FIRStorageReference *guestImageRef = [gustImageStorageRef child:@"randomGidForGuestOne.png"];
 //    FIRStorageReference *guestImageRef = [gustImageStorageRef child:(@"%@.png",gid)];
     NSLog(@"______________the download url is %@",guestImageRef);
-    
     [guestImageRef dataWithMaxSize:1 * 1024 * 1024 completion:^(NSData * _Nullable data, NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"__________________ nooooo gooooood");
@@ -54,6 +47,15 @@
         }
     }];
 }
+
+
+
+
+
+
+
+
+
 
 
 /*

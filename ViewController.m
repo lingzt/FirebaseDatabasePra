@@ -28,8 +28,6 @@ NSMutableArray *guestArray;
 -(void)viewDidAppear:(BOOL)animated{
     [self loginUserToFirebase];
     [self retriveGuestArrayFromFBDatabse];
-    [self.tableView reloadData];
-
 }
 
 #pragma mark -- login
@@ -73,23 +71,38 @@ NSMutableArray *guestArray;
     FIRDatabaseReference *guestsRef = [[[FIRDatabase database]reference]child:@"guest"];
     [guestsRef observeEventType:FIRDataEventTypeValue withBlock:
      ^(FIRDataSnapshot *snapshot) {
-         NSLog(@"The Snapshot we got is ___________%@",[snapshot.value description]);
          if (snapshot.value != [NSNull null]) {
 //             [self cleanGuestsSortedInGroupList];
              NSLog(@"_____________if snapshot value is not nil");
              for(id key in snapshot.value){
                  id guestInDictionaryFormat = [snapshot.value objectForKey:key];
                  Guest *guestToAssign = [[Guest alloc]initGuestWithGuestDict:guestInDictionaryFormat];
-                 
-                     [guestArray addObject:guestToAssign];
-                 [self.tableView reloadData];
+                     dispatch_async(dispatch_get_main_queue(), ^(){
+                         [self updateGImageWithGuestToBeUpdatedWithGid:guestToAssign];
+                         NSLog(@"DONE UPDATEING IMAGE LOCALLY, TABLEVIEW TO BE RELOAD ___________________");
+                         [self.tableView reloadData];
+                     });
+                [guestArray addObject:guestToAssign];
              }
          }
-//         [self.tableView reloadData];
      }];
+}
 
-    
-
+-(void)updateGImageWithGuestToBeUpdatedWithGid :(Guest *)guestToUpdate{
+    FIRStorage *storage = [FIRStorage storage];
+    FIRStorageReference *gustImageStorageRef = [storage referenceForURL:@"gs://fir-databasepra.appspot.com/guestImage/"];
+    FIRStorageReference *guestImageRef = [gustImageStorageRef child:@"randomGidForGuestOne.png"];
+    //    FIRStorageReference *guestImageRef = [gustImageStorageRef child:(@"%@.png",gid)];
+    NSLog(@"______________the download url is %@",guestImageRef);
+    [guestImageRef dataWithMaxSize:1 * 1024 * 1024 completion:^(NSData * _Nullable data, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(error.description);
+        }else{
+            NSLog(@"%@",data);
+            guestToUpdate.gImage = [UIImage imageWithData:data];
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 
