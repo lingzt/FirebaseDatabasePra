@@ -63,6 +63,7 @@ NSMutableArray *guestArray;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     cell.textLabel.text = [[guestArray objectAtIndex:indexPath.row] gid];
+    cell.imageView.image = [[guestArray objectAtIndex:indexPath.row] gImage];
     return cell;
 }
 
