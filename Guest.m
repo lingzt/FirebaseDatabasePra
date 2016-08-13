@@ -13,8 +13,8 @@
 @implementation Guest
 /*
  @property (strong,nonatomic) NSString *gid;
- @property (strong,nonatomic) NSNumber *guestNumber;
- @property (strong,nonatomic) NSArray *guestsPlusOneList;
+ @property (strong,nonatomic) NSNumber *guestAndPlusOneNumber;
+ @property (strong,nonatomic) NSArray *guestAndPlusOneList;
  @property (strong,nonatomic) UIImage *gImage;
  */
 
@@ -22,25 +22,27 @@
     self = [super init];
     if (self) {
         _gid = guestDict[@"gid"];
-        _guestNumber = guestDict[@"guestsPlusOneList"];
-        _guestPlusOneList = guestDict[@"guestsPlusOneList"];
+        _guestAndPlusOneNumber= guestDict[@"guestAndPlusOneNumber"];
+        NSLog(@"___________ guestDict is %@",guestDict);
+        
+        //very cool way fetch array from Firebase databse, the data was store as dictionary like "guestAndPlusOneList":{"0": "randomGidForGuestOne","1":"randomGidForGuestTwo"}, however we get it back as "guestAndPlusOneList":["randomGidForGuestOne","randomGidForGuestTwo"],
+        
+        NSMutableArray *guestAndPlusOneListArray= guestDict[@"guestAndPlusOneList"];
+        _guestAndPlusOneList = guestAndPlusOneListArray;
         _gImage = [UIImage imageNamed:@"placeholder.png"];
     }
     dispatch_async(dispatch_get_main_queue(), ^(){
-        [self updateGImageWithGuestToBeUpdated];
+        [self updateGImageWithGuestToBeUpdatedWithGid:_gid];
         NSLog(@"%@",_gImage.description);
+        NSLog(self.description);
     });
-    NSLog(self.description);
     return self;
 }
 
--(void)updateGImageWithGuestToBeUpdated{
-//    gs://fir-databasepra.appspot.com/gid.png
-    // Get a reference to the storage service, using the default Firebase App
+-(void)updateGImageWithGuestToBeUpdatedWithGid :(NSString *)gid{
     FIRStorage *storage = [FIRStorage storage];
-    // Create a storage reference from our storage service
     FIRStorageReference *gustImageStorageRef = [storage referenceForURL:@"gs://fir-databasepra.appspot.com/guestImage/"];
-    FIRStorageReference *guestImageRef = [gustImageStorageRef child:@"images/space.jpg"];
+    FIRStorageReference *guestImageRef = [gustImageStorageRef child:(@"%@.png",gid)];
     
     [guestImageRef dataWithMaxSize:1 * 1024 * 1024 completion:^(NSData * _Nullable data, NSError * _Nullable error) {
         if (error != nil) {
@@ -49,16 +51,6 @@
             _gImage = [UIImage imageWithData:data];
         }
     }];
-    
-    
-//    [guestImageRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
-//        if (error != nil) {
-//            NSLog(error.description);
-//        } else {
-//            // Local file URL for "images/island.jpg" is returned
-//            NSLog(URL.description);
-//        }
-//    }];
 }
 
 

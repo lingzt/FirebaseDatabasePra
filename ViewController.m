@@ -7,25 +7,34 @@
 //
 
 #import "ViewController.h"
+#import "Guest.h"
+@import FirebaseStorage;
 @import Firebase;
+
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
 @implementation ViewController
-NSArray *guestArray;
+NSMutableArray *guestArray;
 
 
 - (void)viewDidLoad {
+    guestArray = [[NSMutableArray alloc]init];
     [super viewDidLoad];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
     [self loginUserToFirebase];
+    [self retriveGuestArrayFromFBDatabse];
+    [self.tableView reloadData];
+
 }
 
 #pragma mark -- login
 -(void)loginUserToFirebase{
     NSString *newPwd = @"111111";
-    
     [[FIRAuth auth] signInWithEmail:@"ling@gmail.com"
                            password:newPwd
                          completion:^(FIRUser *user, NSError *error) {
@@ -48,18 +57,38 @@ NSArray *guestArray;
 
 #pragma mark -- tableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [guestArray count];
+        return [guestArray count];
 
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    cell.textLabel.text = @"test cell";
+    cell.textLabel.text = [[guestArray objectAtIndex:indexPath.row] gid];
     return cell;
-
 }
 
 
 #pragma mark -- retrieve 
+-(void)retriveGuestArrayFromFBDatabse{
+    FIRDatabaseReference *guestsRef = [[[FIRDatabase database]reference]child:@"guest"];
+    [guestsRef observeEventType:FIRDataEventTypeValue withBlock:
+     ^(FIRDataSnapshot *snapshot) {
+         NSLog(@"The Snapshot we got is ___________%@",[snapshot.value description]);
+         if (snapshot.value != [NSNull null]) {
+//             [self cleanGuestsSortedInGroupList];
+             NSLog(@"_____________if snapshot value is not nil");
+             for(id key in snapshot.value){
+                 id guestInDictionaryFormat = [snapshot.value objectForKey:key];
+                 Guest *guestToAssign = [[Guest alloc]initGuestWithGuestDict:guestInDictionaryFormat];
+                 
+                     [guestArray addObject:guestToAssign];
+             }
+         }
+         [self.tableView reloadData];
+     }];
+
+    
+
+}
 
 
 
