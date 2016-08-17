@@ -11,8 +11,7 @@
 
 @interface Guest : NSObject
 @property (strong,nonatomic) NSString *gid;
-@property (strong,nonatomic) NSNumber *guestAndPlusOneNumber;
-@property (strong,nonatomic) NSMutableArray *guestAndPlusOneList;
+@property (strong,nonatomic) NSNumber *guestAndHisCompanyNumber;
 @property (strong,nonatomic) UIImage *gImage;
 
 -(id)initGuestWithGuestDict: (NSDictionary *)guestDict;

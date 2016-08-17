@@ -16,13 +16,12 @@
     self = [super init];
     if (self) {
         _gid = guestDict[@"gid"];
-        _guestAndPlusOneNumber= guestDict[@"guestAndPlusOneNumber"];
+        _guestAndHisCompanyNumber= guestDict[@"guestAndHisCompanyNumber"];
         
-/*very cool way fetch array from Firebase databse, the data was store as dictionary like "guestAndPlusOneList":{"0": "randomGidForGuestOne","1":"randomGidForGuestTwo"}, however we get it back as "guestAndPlusOneList":["randomGidForGuestOne","randomGidForGuestTwo"],*/
+/*very cool way fetch array from Firebase databse, the data was store as dictionary like "guestAndHisCompanyList":{"0": "randomGidForGuestOne","1":"randomGidForGuestTwo"}, however we get it back as "guestAndHisCompanyList":["randomGidForGuestOne","randomGidForGuestTwo"],*/
 
-        NSMutableArray *guestAndPlusOneListArray= guestDict[@"guestAndPlusOneList"];
-        NSLog(@"_________the guest list array is %@",guestAndPlusOneListArray);
-        _guestAndPlusOneList = guestAndPlusOneListArray;
+        NSMutableArray *guestAndHisCompanyListArray= guestDict[@"guestAndHisCompanyList"];
+        NSLog(@"_________the guest list array is %@",guestAndHisCompanyListArray);
         _gImage = [UIImage imageNamed:@"placeholder.png"];
     }
 
