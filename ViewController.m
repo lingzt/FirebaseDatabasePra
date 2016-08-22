@@ -76,9 +76,9 @@ NSMutableArray *guestArray;
              for(id key in snapshot.value){
                  id guestInDictionaryFormat = [snapshot.value objectForKey:key];
                  Guest *guestToAssign = [[Guest alloc]initGuestWithGuestDict:guestInDictionaryFormat];
-                     dispatch_async(dispatch_get_main_queue(), ^(){
-//if change to dispatch_get_global_queue, also it will work.
-                         //dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                     dispatch_async(dispatch_get_main_queue(), ^(){
+//if change to dispatch_get_main_queue, also it will work, in this case
+                         dispatch_async(dispatch_get_global_queue(0, 0), ^{
                          [self updateGImageWithGuestToBeUpdatedWithGid:guestToAssign];
                          [self.tableView reloadData];
                      });
