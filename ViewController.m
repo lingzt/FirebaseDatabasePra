@@ -76,10 +76,10 @@ NSMutableArray *guestArray;
              for(id key in snapshot.value){
                  id guestInDictionaryFormat = [snapshot.value objectForKey:key];
                  Guest *guestToAssign = [[Guest alloc]initGuestWithGuestDict:guestInDictionaryFormat];
-                     dispatch_async(dispatch_get_main_queue(), ^(){
-                         [NSThread sleepForTimeInterval:5.0f];
-//if change to dispatch_get_main_queue, also it will work, in this case
-//                         dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//                     dispatch_async(dispatch_get_main_queue(), ^(){
+//                         [NSThread sleepForTimeInterval:5.0f];
+//if change to dispatch_get_main_queue, also it will work, when the image are downloading fine. If download process blocked, the whole App will crash, so in this case, I prefer using dispatch_async(dispatch_get_global_queue. 
+                         dispatch_async(dispatch_get_global_queue(0, 0), ^{
                          [self updateGImageWithGuestToBeUpdatedWithGid:guestToAssign];
                          [self.tableView reloadData];
                      });
