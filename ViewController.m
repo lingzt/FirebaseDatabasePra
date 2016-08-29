@@ -78,12 +78,17 @@ NSMutableArray *guestArray;
                  Guest *guestToAssign = [[Guest alloc]initGuestWithGuestDict:guestInDictionaryFormat];
 //                     dispatch_async(dispatch_get_main_queue(), ^(){
 //                         [NSThread sleepForTimeInterval:5.0f];
-//if change to dispatch_get_main_queue, also it will work, when the image are downloading fine. If download process blocked, the whole App will crash, so in this case, I prefer using dispatch_async(dispatch_get_global_queue. 
+//if change to dispatch_get_main_queue, also it will work, when the image are downloading fine. If download process blocked, the whole App will crash, so in this case, I prefer using dispatch_async(dispatch_get_global_queue.
                          dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                             while (1) {
+                                 
+                             }
                          [self updateGImageWithGuestToBeUpdatedWithGid:guestToAssign];
                          [self.tableView reloadData];
                      });
                 [guestArray addObject:guestToAssign];
+                [self.tableView reloadData];
+                 
              }
          }
      }];
@@ -94,7 +99,8 @@ NSMutableArray *guestArray;
     FIRStorageReference *gustImageStorageRef = [storage referenceForURL:@"gs://fir-databasepra.appspot.com/guestImage/"];
     FIRStorageReference *guestImageRef = [gustImageStorageRef child:@"randomGidForGuestOne.png"];
     NSLog(@"______________the download url is %@",guestImageRef);
-    [guestImageRef dataWithMaxSize:1 * 1024 * 1024 completion:^(NSData * _Nullable data, NSError * _Nullable error) {
+    [guestImageRef dataWithMaxSize:1 * 1024 * 1024 completion:^(NSData * _Nullable data, NSError * _Nullable error)
+    {
         if (error != nil) {
             NSLog(error.description);
         }else{
